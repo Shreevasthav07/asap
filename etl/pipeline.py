@@ -1,16 +1,15 @@
-from extract import extract_csv
+from extract import extract_file
 from validate import validate_sales_data
 from transform import transform_sales_data
 from load import load_sales_data
+import argparse
 
 
-def run_pipeline():
-
-    file_path = "data/raw/sales.csv"
-
+def run_pipeline(file_path):
+    
     print("\n--- SALES ETL PIPELINE ---")
 
-    df = extract_csv(file_path)
+    df = extract_file(file_path)
 
     df = validate_sales_data(df)
 
@@ -22,4 +21,13 @@ def run_pipeline():
 
 
 if __name__ == "__main__":
-    run_pipeline()
+    parser = argparse.ArgumentParser(
+        description="Run the sales ETL Pipeline"
+    )
+    parser.add_argument(
+        "file_path",
+        help = "Path to the CSV File"
+    )
+    args = parser.parse_args()
+
+    run_pipeline(args.file_path)

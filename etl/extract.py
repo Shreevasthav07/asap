@@ -1,21 +1,16 @@
+from sources.csv_reader import read_csv
+from sources.excel_reader import read_excel
 from pathlib import Path
-import pandas as pd
 
-
-def extract_csv(file_path):
+def extract_file(file_path):
     file_path = Path(file_path)
+    if file_path.suffix.lower() == ".csv":
+        return read_csv(file_path)
 
-    if not file_path.exists():
-        raise FileNotFoundError(f"File not found: {file_path}")
+    elif file_path.suffix.lower() in [".xlsx", ".xls"]:
+        return read_excel(file_path)
 
-    df = pd.read_csv(file_path)
-
-    print(f"Extracted {len(df)} rows from {file_path.name}")
-
-    return df
-
-if __name__ == "__main__":
-    df = extract_csv("data/raw/sales.csv")
-
-    print("\nFirst 5 rows:")
-    print(df.head())
+    else:
+        raise ValueError(
+            f"Unsupported file type: {file_path.suffix}"
+        )
